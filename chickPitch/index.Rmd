@@ -1,0 +1,68 @@
+---
+title       : Chick Weight Diet App Pitch
+subtitle    : An Analysis of different diets
+author      : Peter Sedivec
+job         : 
+framework   : io2012   # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [bootstrap]   # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Chick Weight App Overview
+
+### What's in it for you? 
+
+* Are you looking to raise your own chickens?
+
+* Going organic?  Want to start a farm-to-table business?
+
+* Well then, the Chick Weight App is the app for you
+
+We did a detailed analysis of the available diets for raising chickens based on 
+the following data set, ChickWeight. A synopsis of the dataset is available here
+
+http://www.inside-r.org/r-doc/datasets/ChickWeight
+
+--- 
+
+## Data Set Details
+
+Let's start by looking at an overall summary of the data set, and then take a 
+look at the overview of the four diets:
+```{r, echo=FALSE}
+summary(ChickWeight)
+
+d <- ddply(ChickWeight, .(Chick, Diet), summarize, min=min(weight), 
+              max=max(weight), perGrowth = (max-min)/min*100)
+
+ddply(d, .(Diet), summarize, 
+              count=length(unique(Chick)), aveStartWeight = mean(min),
+              aveEndWeight = mean(max), avePerGrowth = mean(perGrowth))
+```
+
+---
+
+## App Results
+Sample, illustrative results shown below
+
+```{r, echo=FALSE}
+
+p <- ggplot(aes(x=Time, y=weight), data=subset(ChickWeight, Diet==c(1,2))) + 
+            geom_line(aes(group=Chick)) + facet_wrap(~Diet) + 
+            ggtitle("Comparison of Diets:")
+print(p)
+
+```
+
+---
+
+## What are you waiting for, Download today
+
+Our app intuitively allows you to view a side-by-side comparison of two diets, 
+and hence if you start collecting your own dataset and or are able to get diet
+datasets from others you'll be able to load and compare more diets
+
+Visit us at  https://petersedivec.shinyapps.io/chickenWeight/
